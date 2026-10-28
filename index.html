@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="pl">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f43b35">
+    <title>Spider-Man — bohater z sąsiedztwa</title>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Bangers&family=Nunito:wght@400;600;700;800;900&display=swap');
+
+      /* Wspólne kolory strony komiksowej. */
+      :root {
+        color-scheme: light;
+        --ink: #172433;
+        --red: #f43b35;
+        --blue: #1479c9;
+        --yellow: #ffd43b;
+        --paper: #fffdf7;
+      }
+
+      * { box-sizing: border-box; }
+
+      html { scroll-behavior: smooth; }
+
+      body {
+        margin: 0;
+        color: var(--ink);
+        background-color: var(--paper);
+        background-image: radial-gradient(#17243312 1px, transparent 1px);
+        background-size: 14px 14px;
+        font-family: 'Nunito', sans-serif;
+      }
+
+      a { color: inherit; }
+
+      /* Nagłówek strony oraz główny komiksowy baner. */
+      .topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        max-width: 1120px;
+        margin: auto;
+        padding: 22px 28px;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-weight: 900;
+        text-decoration: none;
+      }
+
+      .brand-mark {
+        display: grid;
+        width: 38px;
+        height: 38px;
+        place-items: center;
+        color: white;
+        background: var(--red);
+        border: 2px solid var(--ink);
+        border-radius: 50%;
+        font-size: 21px;
+        transform: rotate(-12deg);
+      }
+
+      .topbar nav { display: flex; gap: 25px; }
+      .topbar nav a { font-size: 14px; font-weight: 800; text-decoration: none; }
+      .topbar nav a:hover { color: var(--red); }
+
+      .hero {
+        position: relative;
+        display: grid;
+        grid-template-columns: 1.1fr .9fr;
+        align-items: center;
+        gap: 24px;
+        max-width: 1120px;
+        min-height: 490px;
+        margin: 8px auto 54px;
+        padding: 52px 56px;
+        overflow: hidden;
+        background: var(--red);
+        border: 3px solid var(--ink);
+        box-shadow: 9px 9px 0 var(--ink);
+      }
+
+      .hero::before {
+        position: absolute;
+        inset: 0;
+        background-image: radial-gradient(#ffffff30 1.3px, transparent 1.3px);
+        background-size: 12px 12px;
+        content: '';
+        pointer-events: none;
+      }
+
+      .hero-copy, .hero-art { position: relative; z-index: 1; }
+      .eyebrow { margin: 0 0 12px; font-size: 12px; font-weight: 900; letter-spacing: 1px; text-transform: uppercase; }
+
+      h1, h2, h3, p { margin-top: 0; }
+
+      h1, h2, .sticker, .action-button {
+        font-family: 'Bangers', Impact, sans-serif;
+        font-weight: 400;
+        letter-spacing: 0;
+      }
+
+      h1 {
+        max-width: 600px;
+        margin-bottom: 14px;
+        font-size: clamp(56px, 9vw, 104px);
+        line-height: .88;
+        text-transform: uppercase;
+      }
+
+      h1 span { color: white; text-shadow: 3px 3px 0 var(--ink); }
+
+      .hero-copy > p:not(.eyebrow) { max-width: 430px; margin-bottom: 25px; font-size: 17px; font-weight: 700; line-height: 1.6; }
+
+      .action-button {
+        min-height: 48px;
+        padding: 9px 19px;
+        color: var(--ink);
+        background: var(--yellow);
+        border: 2px solid var(--ink);
+        box-shadow: 3px 3px 0 var(--ink);
+        cursor: pointer;
+        font-size: 22px;
+        transform: rotate(-2deg);
+        transition: transform 150ms ease, box-shadow 150ms ease;
+      }
+
+      .action-button:hover { box-shadow: 5px 5px 0 var(--ink); transform: translate(-2px, -2px) rotate(1deg); }
+      .action-button:focus-visible, a:focus-visible { outline: 3px solid var(--blue); outline-offset: 4px; }
+
+      .hero-art { display: grid; min-height: 330px; place-items: center; }
+
+      .burst {
+        position: absolute;
+        width: min(30vw, 330px);
+        aspect-ratio: 1;
+        background: var(--yellow);
+        clip-path: polygon(50% 0%, 59% 25%, 82% 7%, 75% 34%, 100% 30%, 81% 50%, 100% 69%, 73% 69%, 81% 96%, 58% 76%, 50% 100%, 41% 75%, 19% 95%, 27% 68%, 0 70%, 19% 50%, 0 31%, 27% 33%, 18% 7%, 42% 25%);
+        transform: rotate(-8deg);
+      }
+
+      .mask {
+        position: relative;
+        width: min(48vw, 250px);
+        aspect-ratio: .88;
+        background: var(--blue);
+        border: 4px solid var(--ink);
+        border-radius: 48% 48% 42% 42% / 42% 42% 58% 58%;
+        box-shadow: 7px 8px 0 var(--ink);
+        transform: rotate(7deg);
+      }
+
+      .mask::before {
+        position: absolute;
+        inset: 15% 8%;
+        background: repeating-conic-gradient(from 8deg at 50% 48%, transparent 0 12deg, #102c4860 12.5deg 13.5deg, transparent 14deg 30deg);
+        border-radius: inherit;
+        content: '';
+      }
+
+      .eye {
+        position: absolute;
+        top: 39%;
+        width: 34%;
+        height: 18%;
+        background: white;
+        border: 3px solid var(--ink);
+        clip-path: polygon(0 25%, 100% 0, 76% 100%, 18% 78%);
+      }
+
+      .eye.left { left: 12%; transform: rotate(13deg); }
+      .eye.right { right: 12%; transform: scaleX(-1) rotate(13deg); }
+
+      .sticker {
+        position: absolute;
+        top: 8%;
+        right: 2%;
+        padding: 9px 15px;
+        background: white;
+        border: 2px solid var(--ink);
+        font-size: 25px;
+        transform: rotate(9deg);
+      }
+
+      .section { max-width: 1040px; margin: 0 auto; padding: 0 28px 64px; }
+      .section-heading { margin-bottom: 24px; font-size: 43px; line-height: 1; }
+      .section-heading span { color: var(--red); }
+
+      .about {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 32px;
+        align-items: start;
+      }
+
+      .about p { margin-bottom: 0; font-size: 17px; line-height: 1.75; }
+
+      .quote {
+        padding: 20px 22px;
+        background: var(--yellow);
+        border: 2px solid var(--ink);
+        box-shadow: 5px 5px 0 var(--ink);
+        font-size: 18px;
+        font-weight: 900;
+        line-height: 1.5;
+        transform: rotate(1deg);
+      }
+
+      .quote small { display: block; margin-top: 8px; font-size: 13px; }
+
+      .episode-panel {
+        display: grid;
+        grid-template-columns: 126px 1fr;
+        max-width: 780px;
+        background: white;
+        border: 2px solid var(--ink);
+        box-shadow: 5px 5px 0 var(--ink);
+      }
+
+      .episode-number {
+        display: grid;
+        min-height: 100%;
+        place-content: center;
+        padding: 18px;
+        background: var(--yellow);
+        border-right: 2px solid var(--ink);
+        font-family: 'Bangers', Impact, sans-serif;
+        font-size: 28px;
+        text-align: center;
+      }
+
+      .episode-copy { padding: 21px 24px; }
+      .episode-copy h3 { margin-bottom: 8px; font-size: 20px; }
+      .episode-copy p { margin-bottom: 0; line-height: 1.7; }
+      .episode-next { margin-top: 18px; color: var(--blue); font-size: 14px; font-weight: 900; }
+
+      /* Dwie plansze komiksu z pierwszego odcinka. */
+      .comic-book {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 20px;
+      }
+
+      .comic-page {
+        overflow: hidden;
+        background: white;
+        border: 3px solid var(--ink);
+        box-shadow: 5px 5px 0 var(--ink);
+      }
+
+      .comic-page:nth-child(2) { transform: rotate(1deg); }
+      .comic-label { display: flex; justify-content: space-between; gap: 12px; padding: 11px 14px; background: var(--yellow); border-bottom: 2px solid var(--ink); font-size: 12px; font-weight: 900; text-transform: uppercase; }
+      .comic-art { display: block; width: 100%; height: auto; border-bottom: 2px solid var(--ink); }
+      .comic-caption { min-height: 66px; margin: 0; padding: 13px 15px; font-size: 14px; font-weight: 800; line-height: 1.5; }
+
+      .comic-panels {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 14px;
+      }
+
+      .comic-panel {
+        min-width: 0;
+        overflow: hidden;
+        background: white;
+        border: 2px solid var(--ink);
+        box-shadow: 3px 3px 0 var(--ink);
+      }
+
+      .comic-panel-art { display: block; width: 100%; height: auto; border-bottom: 2px solid var(--ink); }
+      .comic-panel p { min-height: 76px; margin: 0; padding: 10px 11px; font-size: 13px; font-weight: 800; line-height: 1.45; }
+
+      .powers {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+      }
+
+      .power {
+        min-height: 150px;
+        padding: 20px;
+        background: white;
+        border: 2px solid var(--ink);
+        box-shadow: 4px 4px 0 var(--ink);
+      }
+
+      .power:nth-child(2) { background: #e5f4ff; }
+      .power:nth-child(3) { background: #fff1e8; }
+      .power-icon { display: block; margin-bottom: 10px; font-size: 28px; }
+      .power h3 { margin-bottom: 6px; font-size: 17px; }
+      .power p { margin-bottom: 0; font-size: 14px; line-height: 1.5; }
+
+      .play {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        padding: 24px 28px;
+        background: var(--blue);
+        border: 3px solid var(--ink);
+        color: white;
+      }
+
+      .play h2 { margin-bottom: 4px; font-size: 34px; }
+      .play p { margin-bottom: 0; font-weight: 700; }
+      .launcher { position: relative; flex: 0 0 auto; }
+      .play .action-button { flex: 0 0 auto; }
+      .web-shot {
+        display: block;
+        width: 82px;
+        height: 82px;
+        margin: 10px auto -26px;
+        color: white;
+        opacity: 0;
+        transform: scale(.25) rotate(-20deg);
+        transform-origin: center;
+        pointer-events: none;
+      }
+      .web-shot.is-visible { animation: web-pop 420ms cubic-bezier(.2, 1.5, .5, 1) forwards; }
+      @keyframes web-pop {
+        0% { opacity: 0; transform: scale(.2) rotate(-20deg); }
+        75% { opacity: 1; transform: scale(1.12) rotate(5deg); }
+        100% { opacity: 1; transform: scale(1) rotate(0); }
+      }
+      /* Pełnoekranowa pajęczyna oraz lot bohatera po co dziesiątym kliknięciu. */
+      .page-web {
+        position: fixed;
+        z-index: 20;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        color: var(--ink);
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+      }
+      .page-web.is-visible { animation: web-cover 1800ms ease-out forwards; }
+      @keyframes web-cover {
+        0% { opacity: 0; visibility: visible; }
+        18% { opacity: .88; }
+        75% { opacity: .72; }
+        100% { opacity: 0; visibility: hidden; }
+      }
+      .web-flyer {
+        position: fixed;
+        z-index: 21;
+        top: 50%;
+        left: 0;
+        width: clamp(190px, 27vw, 340px);
+        height: auto;
+        opacity: 0;
+        pointer-events: none;
+        transform: translate(-130%, -50%);
+      }
+      .web-flyer.is-flying { animation: fly-across 2400ms cubic-bezier(.35, .05, .55, .95) forwards; }
+      @keyframes fly-across {
+        0% { opacity: 0; transform: translate(-130%, -50%) rotate(-18deg); }
+        12% { opacity: 1; }
+        55% { opacity: 1; transform: translate(50vw, -56%) rotate(12deg); }
+        100% { opacity: 0; transform: translate(130vw, -40%) rotate(22deg); }
+      }
+      #web-count { min-width: 180px; text-align: right; }
+
+      footer { padding: 22px; background: var(--ink); color: white; text-align: center; font-size: 13px; }
+
+      /* Na mniejszych ekranach menu i komiksy układają się w węższe kolumny. */
+      @media (max-width: 760px) {
+        .topbar { flex-wrap: wrap; padding: 16px 20px; }
+        .topbar nav { width: 100%; justify-content: space-between; gap: 13px; }
+        .topbar nav a { font-size: 12px; }
+        .hero { grid-template-columns: 1fr; gap: 0; min-height: 0; margin: 5px 14px 45px; padding: 38px 28px 22px; }
+        .hero-art { min-height: 270px; }
+        .burst { width: 230px; }
+        .mask { width: 175px; }
+        .sticker { top: 3%; right: 9%; }
+        .about { grid-template-columns: 1fr; gap: 20px; }
+        .powers { grid-template-columns: 1fr; }
+        .power { min-height: 0; }
+        .episode-panel { grid-template-columns: 82px 1fr; }
+        .episode-copy { padding: 17px; }
+        .comic-book { grid-template-columns: 1fr; gap: 18px; }
+        .comic-page:nth-child(2) { transform: none; }
+        .comic-panels { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .play { align-items: flex-start; flex-direction: column; }
+        #web-count { min-width: 0; text-align: left; }
+      }
+
+      @media (max-width: 390px) {
+        .topbar { flex-wrap: wrap; }
+        .topbar nav { width: 100%; justify-content: space-between; }
+        .topbar nav { gap: 9px; }
+        .topbar nav a { font-size: 11px; }
+        .comic-panels { grid-template-columns: 1fr; }
+        .comic-panel p { min-height: 0; }
+        .hero { padding-right: 21px; padding-left: 21px; }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        html { scroll-behavior: auto; }
+        *, *::before, *::after { transition-duration: .01ms !important; }
+        .page-web.is-visible { animation-duration: .01ms; }
+        .web-flyer.is-flying { animation-duration: .01ms; }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Efekty interakcji: pajęczyna na ekranie i przelatujący bohater. -->
+    <svg class="page-web" id="page-web" viewBox="0 0 1000 700" preserveAspectRatio="none" aria-hidden="true">
+      <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2.5">
+        <path d="M0 0 1000 700M500 0v700M1000 0 0 700M0 350h1000M250 0l500 700M750 0 250 700M0 175l1000 350M1000 175 0 525" />
+        <path d="M432 283Q500 268 568 283Q582 350 568 417Q500 432 432 417Q418 350 432 283ZM360 211Q500 184 640 211Q666 350 640 489Q500 516 360 489Q334 350 360 211ZM288 139Q500 100 712 139Q750 350 712 561Q500 600 288 561Q250 350 288 139ZM216 67Q500 16 784 67Q834 350 784 633Q500 684 216 633Q166 350 216 67Z" />
+      </g>
+    </svg>
+    <svg class="web-flyer" id="web-flyer" viewBox="0 0 210 250" aria-hidden="true">
+      <g fill="none" stroke="#172433" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M91 95 57 69 31 34M112 96l39-31 34 8M87 146l-25 45-31 28M124 147l31 40 33 16" stroke-width="34" />
+        <path d="M91 95 57 69 31 34M112 96l39-31 34 8M87 146l-25 45-31 28M124 147l31 40 33 16" stroke="#1479c9" stroke-width="23" />
+        <path d="M79 91Q101 79 123 96L137 143Q114 165 79 146L69 115Z" fill="#f43b35" stroke-width="5" />
+        <path d="M87 145 62 191 31 219M124 146l31 41 33 16" stroke-width="32" />
+        <path d="M87 145 62 191 31 219M124 146l31 41 33 16" stroke="#1479c9" stroke-width="21" />
+        <path d="M77 44Q77 11 104 8Q132 9 134 43L123 75Q105 89 85 72Z" fill="#f43b35" stroke-width="5" />
+        <path d="M83 39 101 34 98 49 85 48ZM108 34 127 39 125 48 111 49Z" fill="#fff" stroke-width="3" />
+        <path d="M101 111l7 7-7 9-7-9zM101 111l-2 10 9-4M108 118l-9 3" stroke="#172433" stroke-width="2.5" />
+      </g>
+    </svg>
+    <header class="topbar">
+      <a class="brand" href="#start" aria-label="Spider-Man, strona główna">
+        <span class="brand-mark" aria-hidden="true">S</span>
+        <span>SUPER EKIPA</span>
+      </a>
+      <nav aria-label="Menu główne">
+        <a href="#o-bohaterze">O bohaterze</a>
+        <a href="#odcinek-1">Odcinek 1</a>
+        <a href="#odcinek-2">Odcinek 2</a>
+        <a href="#komiks">Komiks</a>
+        <a href="#moce">Supermoce</a>
+        <a href="#zabawa">Zabawa</a>
+      </nav>
+    </header>
+
+    <!-- Główna zawartość: opis bohatera, odcinki, moce i zabawa. -->
+    <main>
+      <section class="hero" id="start" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <p class="eyebrow">Bohater z sąsiedztwa</p>
+          <h1 id="hero-title">Spider-<span>Man!</span></h1>
+          <p>Mój ulubiony superbohater! Śmiga na pajęczynie, pomaga ludziom i zawsze znajdzie chwilę na dobrą zabawę.</p>
+          <a class="action-button" href="#o-bohaterze" style="display:inline-block;text-decoration:none">Poznaj go!</a>
+        </div>
+        <div class="hero-art" role="img" aria-label="Komiksowa maska Spider-Mana na żółtym wybuchu">
+          <div class="burst" aria-hidden="true"></div>
+          <div class="mask" aria-hidden="true"><span class="eye left"></span><span class="eye right"></span></div>
+          <span class="sticker" aria-hidden="true">WOW!</span>
+        </div>
+      </section>
+
+      <section class="section about" id="o-bohaterze" aria-labelledby="about-title">
+        <div>
+          <p class="eyebrow">Dlaczego go lubię?</p>
+          <h2 class="section-heading" id="about-title">Jest <span>super!</span></h2>
+          <p>Lubię Spider-Mana za zabawę i niesamowite przygody. Potrafi bujać się między budynkami, robić śmieszne żarty i pomagać każdemu, kto tego potrzebuje. Nawet gdy coś idzie nie tak, nie poddaje się!</p>
+        </div>
+        <aside class="quote">
+          „Z wielką mocą wiąże się wielka odpowiedzialność”.
+          <small>Ważna lekcja dla każdego bohatera</small>
+        </aside>
+      </section>
+
+      <!-- Krótki opis pierwszej przygody. -->
+      <section class="section" id="odcinek-1" aria-labelledby="episode-title">
+        <p class="eyebrow">Moja przygoda</p>
+        <h2 class="section-heading" id="episode-title">Odcinek <span>1</span></h2>
+        <article class="episode-panel">
+          <div class="episode-number">Część<br>pierwsza</div>
+          <div class="episode-copy">
+            <h3>Pajęczy patrol</h3>
+            <p>Podczas spaceru po parku Spider-Man słyszy, że komuś uciekł latawiec i zaplątał się wysoko na drzewie. Bohater wspina się po pniu, ostrożnie uwalnia latawiec pajęczyną i oddaje go dziecku. Na koniec wszyscy puszczają latawiec razem, a Spider-Man rusza dalej na patrol.</p>
+            <p class="episode-next">To początek serii. Następny będzie odcinek 2!</p>
+          </div>
+        </article>
+      </section>
+
+      <!-- Dwie ilustrowane strony komiksu do odcinka pierwszego. -->
+      <section class="section" id="komiks" aria-labelledby="comic-title">
+        <p class="eyebrow">Przygoda w obrazkach</p>
+        <h2 class="section-heading" id="comic-title">Mini <span>komiks</span></h2>
+        <div class="comic-book">
+          <article class="comic-page">
+            <div class="comic-label"><span>Odcinek 1</span><span>Strona 1</span></div>
+            <svg class="comic-art" viewBox="0 0 600 360" role="img" aria-labelledby="comic-art-one-title">
+              <title id="comic-art-one-title">Spider-Man buja się nad miastem w stronę parku</title>
+              <rect width="600" height="360" fill="#bfe8ff" />
+              <path d="M0 81Q36 48 73 81T147 81T220 81T293 81T366 81T439 81T512 81T600 81V0H0Z" fill="#fff6db" />
+              <path d="M0 188H112V360H0ZM112 145H226V360H112ZM410 164H515V360H410ZM515 112H600V360H515Z" fill="#f43b35" stroke="#172433" stroke-width="5" />
+              <path d="M14 207h24v25H14zm48 0h24v25H62zm-48 46h24v25H14zm48 0h24v25H62zm65-83h25v24h-25zm50 0h25v24h-25zm-50 45h25v24h-25zm50 0h25v24h-25zm223 13h22v25h-22zm45 0h22v25h-22zm-45 46h22v25h-22zm45 0h22v25h-22zm49-91h22v25h-22zm0 46h22v25h-22z" fill="#ffd43b" />
+              <path d="M0 302Q114 275 230 306T450 300T600 294V360H0Z" fill="#7bc96f" stroke="#172433" stroke-width="5" />
+              <path d="M0 315 600 315" stroke="#172433" stroke-width="4" />
+              <path d="M373 137 491 22" stroke="#172433" stroke-width="8" />
+              <path d="M373 137 491 22" stroke="#fff" stroke-width="4" />
+              <g stroke="#172433" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M283 168 239 137 210 99M319 170l37-35 31-41" fill="none" stroke-width="24" />
+                <path d="M283 168 239 137 210 99M319 170l37-35 31-41" fill="none" stroke="#1479c9" stroke-width="15" />
+                <path d="M285 156Q302 146 320 165L328 193 292 207 271 184Z" fill="#f43b35" stroke-width="4" />
+                <path d="M291 199 263 228 230 226M320 195l27 25 34 5" fill="none" stroke-width="24" />
+                <path d="M291 199 263 228 230 226M320 195l27 25 34 5" fill="none" stroke="#1479c9" stroke-width="15" />
+                <path d="M280 122Q279 95 300 92Q322 94 323 120L314 143Q300 151 286 140Z" fill="#f43b35" stroke-width="4" />
+                <path d="m284 116 14-4-2 10-10 1m17-11 14 4-3 7-10-1" fill="#fff" stroke-width="2" />
+              </g>
+              <path d="M468 235q20-18 40 0" fill="none" stroke="#172433" stroke-width="5" stroke-linecap="round" />
+            </svg>
+            <p class="comic-caption">Spider-Man słyszy wołanie z parku i pędzi sprawdzić, co się stało!</p>
+          </article>
+
+          <article class="comic-page">
+            <div class="comic-label"><span>Odcinek 1</span><span>Strona 2</span></div>
+            <svg class="comic-art" viewBox="0 0 600 360" role="img" aria-labelledby="comic-art-two-title">
+              <title id="comic-art-two-title">Spider-Man pomaga dziecku odzyskać latawiec w parku</title>
+              <rect width="600" height="360" fill="#d9f1ff" />
+              <circle cx="500" cy="63" r="34" fill="#ffd43b" stroke="#172433" stroke-width="4" />
+              <path d="M0 244Q100 219 207 248T410 243T600 236V360H0Z" fill="#7bc96f" stroke="#172433" stroke-width="5" />
+              <path d="M0 313Q130 292 250 318T480 312T600 305V360H0Z" fill="#f7d9a8" />
+              <path d="M449 270V123" stroke="#80502b" stroke-width="25" stroke-linecap="round" />
+              <path d="M450 167Q394 127 409 85M451 174Q507 126 496 85M451 148Q453 107 461 75" fill="none" stroke="#45824b" stroke-width="25" stroke-linecap="round" />
+              <path d="M498 58 535 96 498 134 461 96Z" fill="#f43b35" stroke="#172433" stroke-width="5" />
+              <path d="M498 58v76M461 96h74" stroke="#ffd43b" stroke-width="4" />
+              <path d="M377 116 498 96" stroke="#172433" stroke-width="5" />
+              <path d="M377 116 498 96" stroke="#fff" stroke-width="2.5" />
+              <g stroke="#172433" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M171 213 140 177 115 150M207 211l27-43 25-32" fill="none" stroke-width="24" />
+                <path d="M171 213 140 177 115 150M207 211l27-43 25-32" fill="none" stroke="#1479c9" stroke-width="15" />
+                <path d="M171 207Q190 194 208 211L218 250 178 262 158 233Z" fill="#f43b35" stroke-width="4" />
+                <path d="M177 253 154 286 130 302M211 252l29 28 29 1" fill="none" stroke-width="24" />
+                <path d="M177 253 154 286 130 302M211 252l29 28 29 1" fill="none" stroke="#1479c9" stroke-width="15" />
+                <path d="M170 174Q169 147 191 144Q214 146 215 172L205 193Q191 202 176 190Z" fill="#f43b35" stroke-width="4" />
+                <path d="m174 168 14-4-2 10-10 1m17-11 14 4-3 7-10-1" fill="#fff" stroke-width="2" />
+              </g>
+              <g stroke="#172433" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M337 272 324 310M358 273 372 310" fill="none" stroke-width="12" />
+                <path d="M334 235Q348 225 361 237L364 276 330 276Z" fill="#1479c9" stroke-width="4" />
+                <circle cx="348" cy="218" r="14" fill="#f4bc83" stroke-width="4" />
+                <path d="M331 213q15-23 33-2" fill="none" stroke="#80502b" stroke-width="8" />
+                <path d="M336 249 315 263M359 249l18 10" fill="none" stroke="#f4bc83" stroke-width="9" />
+              </g>
+              <path d="M110 98q47-36 95 0v31h-53l-15 18v-18h-27z" fill="#fff" stroke="#172433" stroke-width="4" />
+              <text x="151" y="119" fill="#172433" font-family="sans-serif" font-size="18" font-weight="900" text-anchor="middle">Mam go!</text>
+            </svg>
+            <p class="comic-caption">Dzięki pajęczej sieci latawiec wraca do właściciela. Teraz zabawa może trwać dalej!</p>
+          </article>
+        </div>
+      </section>
+
+      <!-- Osiem kolejnych kadrów opowiada drugą przygodę. -->
+      <section class="section" id="odcinek-2" aria-labelledby="episode-two-title">
+        <p class="eyebrow">Osiem obrazków</p>
+        <h2 class="section-heading" id="episode-two-title">Odcinek <span>2</span></h2>
+        <p style="max-width:700px;margin-bottom:22px;line-height:1.7">Podczas meczu piłka ucieka z boiska i toczy się w stronę kratki odpływowej. Spider-Man rusza z pomocą, zanim piłka zniknie z oczu.</p>
+        <div class="comic-panels">
+          <article class="comic-panel">
+            <svg class="comic-panel-art" viewBox="0 0 300 180" role="img" aria-labelledby="ep2-frame1-title">
+              <title id="ep2-frame1-title">Dzieci grają w koszykówkę na boisku</title>
+              <rect width="300" height="180" fill="#bfe8ff" /><rect y="105" width="300" height="75" fill="#7bc96f" />
+              <path d="M0 143H300M15 106v74m270-74v74" stroke="#fff" stroke-width="4" />
+              <path d="M247 66v83m-22-42h44m-35 0q0 30 13 30t13-30" fill="none" stroke="#172433" stroke-width="5" />
+              <circle cx="145" cy="112" r="10" fill="#f4bc83" stroke="#172433" stroke-width="3" /><path d="M145 124v26m0-16-13 10m13-10 13 8m-13 8-10 14m10-14 11 14" fill="none" stroke="#1479c9" stroke-width="6" stroke-linecap="round" />
+              <circle cx="91" cy="113" r="10" fill="#f4bc83" stroke="#172433" stroke-width="3" /><path d="M91 125v24m0-14-12 8m12-8 13 6m-13 8-9 13m9-13 10 13" fill="none" stroke="#f43b35" stroke-width="6" stroke-linecap="round" />
+              <circle cx="183" cy="91" r="11" fill="#f47b24" stroke="#172433" stroke-width="3" /><path d="M173 91h20m-10-10v20" stroke="#172433" stroke-width="2" />
+            </svg>
+            <p>Przyjaciele Spider-Mana rozgrywają mecz na boisku.</p>
+          </article>
+
+          <article class="comic-panel">
+            <svg class="comic-panel-art" viewBox="0 0 300 180" role="img" aria-labelledby="ep2-frame2-title">
+              <title id="ep2-frame2-title">Piłka odbija się i przelatuje za boisko</title>
+              <rect width="300" height="180" fill="#bfe8ff" /><rect y="116" width="300" height="64" fill="#7bc96f" />
+              <path d="M0 135H300M220 95v85m0-85h72" stroke="#fff" stroke-width="4" />
+              <circle cx="178" cy="105" r="17" fill="#f47b24" stroke="#172433" stroke-width="4" /><path d="M162 105h32m-16-16v32" stroke="#172433" stroke-width="2.5" />
+              <path d="M185 74q22-19 39-3m-28-17q28-12 48 5" fill="none" stroke="#f43b35" stroke-width="4" stroke-linecap="round" />
+              <path d="M73 78v27m0-17-12-11m12 11 12-11m-12 28-10 15m10-15 12 15" fill="none" stroke="#1479c9" stroke-width="7" stroke-linecap="round" />
+              <circle cx="73" cy="65" r="10" fill="#f4bc83" stroke="#172433" stroke-width="3" />
+              <path d="M84 54q19-19 35 0h-35Z" fill="#fff" stroke="#172433" stroke-width="3" /><text x="101" y="68" font-size="17" font-weight="900" text-anchor="middle" fill="#172433">O nie!</text>
+            </svg>
+            <p>Ojej! Rzut jest za mocny i piłka leci poza boisko.</p>
+          </article>
+
+          <article class="comic-panel">
+            <svg class="comic-panel-art" viewBox="0 0 300 180" role="img" aria-labelledby="ep2-frame3-title">
+              <title id="ep2-frame3-title">Piłka toczy się chodnikiem w stronę kratki</title>
+              <rect width="300" height="180" fill="#d9f1ff" /><path d="M0 72h300v108H0Z" fill="#f1d8b0" />
+              <path d="M0 69h300M0 76h300" stroke="#172433" stroke-width="4" />
+              <path d="M203 129h68m-60 0v21m12-21v21m12-21v21m12-21v21m12-21v21m-56 0h68" stroke="#172433" stroke-width="4" />
+              <circle cx="149" cy="114" r="19" fill="#f47b24" stroke="#172433" stroke-width="4" /><path d="M131 114h36m-18-18v36" stroke="#172433" stroke-width="2.5" />
+              <path d="M162 90q20-14 36 0m-32-12q23-14 42 0" fill="none" stroke="#f43b35" stroke-width="4" stroke-linecap="round" />
+              <path d="M40 158h42m-32-10 20 20" stroke="#1479c9" stroke-width="5" stroke-linecap="round" />
+              <text x="36" y="125" fill="#172433" font-size="16" font-weight="900">Toczy się!</text>
+            </svg>
+            <p>Piłka pędzi chodnikiem prosto do kratki odpływowej.</p>
+          </article>
+
+          <article class="comic-panel">
+            <svg class="comic-panel-art" viewBox="0 0 300 180" role="img" aria-labelledby="ep2-frame4-title">
+              <title id="ep2-frame4-title">Spider-Man zauważa piłkę i rusza do akcji</title>
+              <rect width="300" height="180" fill="#ffd43b" /><path d="M0 120h300v60H0Z" fill="#f1d8b0" />
+              <path d="m53 33 10 20 22-8-10 20 17 15-23-1-7 22-8-21-23 4 16-17-12-20 21 11z" fill="#fff" stroke="#172433" stroke-width="3" />
+              <path d="M173 121 203 97l20 18m-50 6-15 23m45-27 20 20" fill="none" stroke="#172433" stroke-width="19" stroke-linecap="round" />
+              <path d="M173 121 203 97l20 18m-50 6-15 23m45-27 20 20" fill="none" stroke="#1479c9" stroke-width="12" stroke-linecap="round" />
+              <path d="M169 103q19-13 35 4l-3 28-31-3-11-17Z" fill="#f43b35" stroke="#172433" stroke-width="3" />
+              <path d="M161 96q0-22 18-23 19 2 18 20l-8 16-22-2Z" fill="#f43b35" stroke="#172433" stroke-width="3" /><path d="m163 91 14-4-2 9-10 1m14-10 13 4-3 7-10-1" fill="#fff" stroke="#172433" stroke-width="2" />
+              <circle cx="265" cy="139" r="14" fill="#f47b24" stroke="#172433" stroke-width="3" />
+            </svg>
+            <p>Spider-Man zauważa kłopot i skacze, by złapać piłkę.</p>
+          </article>
+
+          <article class="comic-panel">
+            <svg class="comic-panel-art" viewBox="0 0 300 180" role="img" aria-labelledby="ep2-frame5-title">
+              <title id="ep2-frame5-title">Spider-Man wystrzeliwuje pajęczynę do piłki</title>
+              <rect width="300" height="180" fill="#d9f1ff" /><path d="M0 133h300v47H0Z" fill="#f1d8b0" />
+              <path d="M36 146h73m-64-10v28m15-28v28m15-28v28m15-28v28m-55 0h73" stroke="#172433" stroke-width="4" />
+              <circle cx="151" cy="111" r="19" fill="#f47b24" stroke="#172433" stroke-width="4" /><path d="M133 111h36m-18-18v36" stroke="#172433" stroke-width="2.5" />
+              <path d="M225 39 169 98" stroke="#172433" stroke-width="7" /><path d="M225 39 169 98" stroke="#fff" stroke-width="3" />
+              <path d="M215 36q12-13 25-3m-30-9q18-16 34-7" fill="none" stroke="#f43b35" stroke-width="4" stroke-linecap="round" />
+              <path d="m215 35 10 5-9 4" fill="none" stroke="#172433" stroke-width="3" />
+            </svg>
+            <p>Pstryk! Pajęczyna leci w stronę uciekającej piłki.</p>
+          </article>
+
+          <article class="comic-panel">
+            <svg class="comic-panel-art" viewBox="0 0 300 180" role="img" aria-labelledby="ep2-frame6-title">
+              <title id="ep2-frame6-title">Piłka zatrzymuje się bezpiecznie na pajęczynie</title>
+              <rect width="300" height="180" fill="#fff1e8" /><path d="M0 128h300v52H0Z" fill="#f1d8b0" />
+              <path d="M44 140h66m-58-10v24m14-24v24m14-24v24m14-24v24m-50 0h66" stroke="#172433" stroke-width="4" />
+              <circle cx="165" cy="85" r="24" fill="#f47b24" stroke="#172433" stroke-width="4" /><path d="M142 85h46m-23-23v46" stroke="#172433" stroke-width="3" />
+              <path d="M255 23 165 85M215 23l-50 62m84-1-84 1m-40-43 40 43m-19-75 19 75m-38-55 38 55" fill="none" stroke="#fff" stroke-width="3" />
+              <path d="M255 23 165 85M215 23l-50 62m84-1-84 1m-40-43 40 43m-19-75 19 75m-38-55 38 55" fill="none" stroke="#172433" stroke-width="1.5" />
+              <path d="m120 51 8 13-15 2m104-49 15 3-7 13" fill="none" stroke="#f43b35" stroke-width="4" />
+            </svg>
+            <p>Jest! Piłka zatrzymuje się w miękkiej, mocnej sieci.</p>
+          </article>
+
+          <article class="comic-panel">
+            <svg class="comic-panel-art" viewBox="0 0 300 180" role="img" aria-labelledby="ep2-frame7-title">
+              <title id="ep2-frame7-title">Spider-Man oddaje piłkę dzieciom</title>
+              <rect width="300" height="180" fill="#bfe8ff" /><rect y="117" width="300" height="63" fill="#7bc96f" />
+              <path d="M50 117v63m0-38 15-20m-15 20-14-20m14 40-12 19m12-19 13 19" fill="none" stroke="#f4bc83" stroke-width="8" stroke-linecap="round" />
+              <circle cx="50" cy="103" r="11" fill="#f4bc83" stroke="#172433" stroke-width="3" /><path d="M38 100q12-19 24 0" fill="none" stroke="#80502b" stroke-width="6" />
+              <path d="M134 126 123 97l22-10m0 39 11-28 17-7m-39 35-14 28m25-28 18 27" fill="none" stroke="#172433" stroke-width="18" stroke-linecap="round" />
+              <path d="M134 126 123 97l22-10m0 39 11-28 17-7m-39 35-14 28m25-28 18 27" fill="none" stroke="#1479c9" stroke-width="11" stroke-linecap="round" />
+              <path d="M131 108q14-11 27 1l4 24-29 3-11-15Z" fill="#f43b35" stroke="#172433" stroke-width="3" /><circle cx="135" cy="86" r="15" fill="#f43b35" stroke="#172433" stroke-width="3" />
+              <path d="m126 85 10-4-1 8-8 1m12-9 10 4-2 6-8-1" fill="#fff" stroke="#172433" stroke-width="2" />
+              <circle cx="217" cy="127" r="16" fill="#f47b24" stroke="#172433" stroke-width="3" /><path d="M201 127h32m-16-16v32" stroke="#172433" stroke-width="2" />
+            </svg>
+            <p>Spider-Man oddaje piłkę. Cała drużyna znów się uśmiecha.</p>
+          </article>
+
+          <article class="comic-panel">
+            <svg class="comic-panel-art" viewBox="0 0 300 180" role="img" aria-labelledby="ep2-frame8-title">
+              <title id="ep2-frame8-title">Spider-Man trafia do kosza i świętuje z drużyną</title>
+              <rect width="300" height="180" fill="#ffd43b" /><rect y="124" width="300" height="56" fill="#7bc96f" />
+              <path d="M236 36v100m-30-60h60m-47 0q0 37 17 37t17-37" fill="none" stroke="#172433" stroke-width="6" />
+              <path d="M55 56 77 38m-37-2 20 18m-21 35 22-21m4-37v26m13-17-10 15" stroke="#f43b35" stroke-width="4" stroke-linecap="round" />
+              <circle cx="213" cy="54" r="14" fill="#f47b24" stroke="#172433" stroke-width="3" /><path d="M200 54h26m-13-13v26" stroke="#172433" stroke-width="2" />
+              <path d="M119 128 136 90l24 11m-41 27-21-12m38-26 8-23m-25 61-15 25m25-25 22 19" fill="none" stroke="#172433" stroke-width="21" stroke-linecap="round" />
+              <path d="M119 128 136 90l24 11m-41 27-21-12m38-26 8-23m-25 61-15 25m25-25 22 19" fill="none" stroke="#1479c9" stroke-width="13" stroke-linecap="round" />
+              <path d="M129 93q16-10 27 4l-2 24-31 1-8-15Z" fill="#f43b35" stroke="#172433" stroke-width="3" /><circle cx="139" cy="72" r="15" fill="#f43b35" stroke="#172433" stroke-width="3" />
+              <path d="m130 71 10-4-1 8-8 1m12-9 10 4-2 6-8-1" fill="#fff" stroke="#172433" stroke-width="2" />
+              <text x="66" y="144" fill="#172433" font-family="sans-serif" font-size="17" font-weight="900">KOSZ!</text>
+            </svg>
+            <p>Potem wszyscy grają razem. Spider-Man trafia do kosza!</p>
+          </article>
+        </div>
+      </section>
+
+      <!-- Najważniejsze pajęcze umiejętności bohatera. -->
+      <section class="section" id="moce" aria-labelledby="powers-title">
+        <p class="eyebrow">Co potrafi?</p>
+        <h2 class="section-heading" id="powers-title">Pajęcze <span>supermoce</span></h2>
+        <div class="powers">
+          <article class="power">
+            <span class="power-icon" aria-hidden="true">🕸️</span>
+            <h3>Pajęczyna!</h3>
+            <p>Wystrzeliwuje mocną sieć i buja się wysoko nad ulicami.</p>
+          </article>
+          <article class="power">
+            <span class="power-icon" aria-hidden="true">🕷️</span>
+            <h3>Pajęczy zmysł</h3>
+            <p>Ostrzega go, gdy w pobliżu dzieje się coś niebezpiecznego.</p>
+          </article>
+          <article class="power">
+            <span class="power-icon" aria-hidden="true">💪</span>
+            <h3>Superzwinność</h3>
+            <p>Skacze, wspina się i wykonuje niesamowite akrobacje.</p>
+          </article>
+        </div>
+      </section>
+
+      <!-- Przycisk uruchamia pajęczynę, a co dziesiąty raz także lot postaci. -->
+      <section class="section" id="zabawa" aria-labelledby="play-title">
+        <div class="play">
+          <div>
+            <h2 id="play-title">Czas na pajęczą akcję!</h2>
+            <p>Naciśnij przycisk i ruszaj na patrol po mieście.</p>
+          </div>
+          <div class="launcher">
+            <button class="action-button" id="web-button" type="button">Pstryk! 🕸️</button>
+            <svg class="web-shot" id="web-shot" viewBox="0 0 100 100" aria-hidden="true">
+              <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2.5">
+                <path d="M50 50 50 3M50 50 83 17M50 50 97 50M50 50 83 83M50 50 50 97M50 50 17 83M50 50 3 50M50 50 17 17" />
+                <path d="M40 40Q50 36 60 40Q64 50 60 60Q50 64 40 60Q36 50 40 40ZM29 29Q50 21 71 29Q79 50 71 71Q50 79 29 71Q21 50 29 29ZM17 17Q50 5 83 17Q95 50 83 83Q50 95 17 83Q5 50 17 17Z" />
+              </g>
+            </svg>
+          </div>
+          <p id="web-count" aria-live="polite">Sieć gotowa!</p>
+        </div>
+      </section>
+    </main>
+
+    <footer>Z wielkim sercem i pajęczą siecią — Spider-Man! 🕷️</footer>
+
+    <script>
+      // Pobieramy przycisk, licznik i elementy animacji ze strony.
+      const webButton = document.querySelector('#web-button');
+      const webCount = document.querySelector('#web-count');
+      const webShot = document.querySelector('#web-shot');
+      const pageWeb = document.querySelector('#page-web');
+      const webFlyer = document.querySelector('#web-flyer');
+      let shots = 0;
+
+      webButton.addEventListener('click', () => {
+        shots += 1;
+        // Zdejmujemy klasę i wymuszamy ponowne przeliczenie układu, by animacja ruszyła od początku.
+        webShot.classList.remove('is-visible');
+        pageWeb.classList.remove('is-visible');
+        void webShot.getBoundingClientRect();
+        webShot.classList.add('is-visible');
+        pageWeb.classList.add('is-visible');
+
+        // Każdy dziesiąty strzał uruchamia dodatkowy przelot Spider-Mana.
+        if (shots % 10 === 0) {
+          webFlyer.classList.remove('is-flying');
+          void webFlyer.getBoundingClientRect();
+          webFlyer.classList.add('is-flying');
+          webCount.textContent = 'Spider-Man leci przez ekran!';
+        } else {
+          webCount.textContent = shots === 1
+            ? 'Pajęczyna wystrzelona!'
+            : `Pajęczyna wystrzelona ${shots} razy!`;
+        }
+      });
+    </script>
+  </body>
+</html>
